@@ -23,11 +23,15 @@ namespace Ms_Hosts
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           // RunCmd("attrib -r -a -s -h %windir%\\system32\\drivers\\etc\\hosts & exit");
+            // RunCmd("attrib -r -a -s -h %windir%\\system32\\drivers\\etc\\hosts & exit");
+            DnsClient dnsClient = new DnsClient();
+            var result = dnsClient.RetDNS("licensing.mp.microsoft.com");
+            System.Net.IPAddress[] iPs = result.AddressList;
+
             string hostspath = System.Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts";
             attr= File.GetAttributes(hostspath);
             File.SetAttributes(hostspath, FileAttributes.Normal);
-            string[] mshosts = new string[] { "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
+            string[] mshosts = new string[] { $"{iPs[0]} licensing.mp.microsoft.com", "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
             SetHosts(mshosts);
         }
         private void RunCmd(string cmdstr)
