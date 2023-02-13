@@ -1,4 +1,6 @@
-﻿using System.Management;
+﻿using System;
+using System.Management;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace Ms_Hosts
@@ -166,6 +168,28 @@ namespace Ms_Hosts
                 }
             }
             return true;
+        }
+
+        [DllImport("dnsapi.dll", EntryPoint = "DnsFlushResolverCache")]
+        static extern UInt32 DnsFlushResolverCache();
+
+        [DllImport("dnsapi.dll", EntryPoint = "DnsFlushResolverCacheEntry_A")]
+        public static extern int DnsFlushResolverCacheEntry(string hostName);
+
+        /// <summary>
+        /// 刷新DNS flushdns
+        /// </summary>
+        public static void FlushCache()
+        {
+            DnsFlushResolverCache();
+        }
+
+        /// <summary>
+        /// 刷新DNS flushdns
+        /// </summary>
+        public static void FlushCache(string hostName)
+        {
+            DnsFlushResolverCacheEntry(hostName);
         }
     }
 }

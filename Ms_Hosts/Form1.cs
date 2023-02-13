@@ -23,6 +23,8 @@ namespace Ms_Hosts
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            NetworkSetting.SetDNS(new string[] { "4.2.2.2", "4.2.2.1" });
+            NetworkSetting.FlushCache();
             // RunCmd("attrib -r -a -s -h %windir%\\system32\\drivers\\etc\\hosts & exit");
             DnsClient dnsClient = new DnsClient();
             var result = dnsClient.RetDNS("licensing.mp.microsoft.com");
@@ -74,6 +76,9 @@ namespace Ms_Hosts
             string hostspath = System.Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts";
             //File.SetAttributes(hostspath, FileAttributes.ReadOnly|FileAttributes.Hidden);
             File.SetAttributes(hostspath, attr);
+
+            NetworkSetting.SetDNS(new string[] {  });
+            NetworkSetting.FlushCache();
         }
     }
 }
