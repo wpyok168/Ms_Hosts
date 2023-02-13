@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Management;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -190,6 +192,58 @@ namespace Ms_Hosts
         public static void FlushCache(string hostName)
         {
             DnsFlushResolverCacheEntry(hostName);
+        }
+
+        /// <summary>
+        /// 获取适配器信息例子，具体实现时需修改。
+        /// </summary>
+        public static void IPConfigAll()
+        {
+            System.Net.NetworkInformation.NetworkInterface[] NwIfs = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface NwIf in NwIfs)
+            {
+                if (NetworkInterfaceType.Loopback == NwIf.NetworkInterfaceType) //跳过环回适配器
+                    continue;
+
+                if (NwIf.OperationalStatus == OperationalStatus.Up) //判断是否处于启动状态，如果不判定，将循环打印所有适配器
+                {
+                    //获取配适器基本信息
+                    string name = NwIf.Name;//配适器名称
+                    string des = NwIf.Description;//配适器描述
+
+                    byte[] Phy = NwIf.GetPhysicalAddress().GetAddressBytes();
+                    string 物理地址 = BitConverter.ToString(Phy);
+
+                    IPInterfaceProperties Propers = NwIf.GetIPProperties();
+
+
+                    //获取配适器IP地址
+                    foreach (UnicastIPAddressInformation UipI in Propers.UnicastAddresses)
+                    {
+                        if (UipI.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            string ipv4 = UipI.Address.ToString();
+                            string 子网掩码 = UipI.IPv4Mask.ToString();
+                        }
+                        if (UipI.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                        {
+                            string ipv6 = UipI.Address.ToString();
+                        }
+                    }
+
+                    //获取配适器网关地址
+                    if (Propers.GatewayAddresses.Count > 0)
+                    {
+                        string 网关 = Propers.GatewayAddresses[0].Address.ToString();
+                    }
+
+                    //获取配适器DNS地址
+                    if (Propers.DnsAddresses.Count > 0)
+                    {
+                        string dns = Propers.DnsAddresses[0].ToString();
+                    }
+                }
+            }
         }
     }
 }
