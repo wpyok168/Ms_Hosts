@@ -19,11 +19,13 @@ namespace Ms_Hosts
         {
             InitializeComponent();
         }
+        private FileAttributes attr;
 
         private void Form1_Load(object sender, EventArgs e)
         {
            // RunCmd("attrib -r -a -s -h %windir%\\system32\\drivers\\etc\\hosts & exit");
             string hostspath = System.Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts";
+            attr= File.GetAttributes(hostspath);
             File.SetAttributes(hostspath, FileAttributes.Normal);
             string[] mshosts = new string[] { "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
             SetHosts(mshosts);
@@ -66,7 +68,8 @@ namespace Ms_Hosts
             RemoveHosts(new List<string> { "licensing.mp.microsoft.com"});
             //RunCmd("attrib +r +a +s +h %windir%\\system32\\drivers\\etc\\hosts & exit"); 
             string hostspath = System.Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts";
-            File.SetAttributes(hostspath, FileAttributes.ReadOnly);
+            //File.SetAttributes(hostspath, FileAttributes.ReadOnly|FileAttributes.Hidden);
+            File.SetAttributes(hostspath, attr);
         }
     }
 }
