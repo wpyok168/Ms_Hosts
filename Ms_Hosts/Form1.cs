@@ -51,7 +51,7 @@ namespace Ms_Hosts
             System.Net.NetworkInformation.NetworkInterface[] NwIfs = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface NwIf in NwIfs)
             {
-                if (NetworkInterfaceType.Loopback == NwIf.NetworkInterfaceType) //跳过环回适配器
+                if (NetworkInterfaceType.Loopback == NwIf.NetworkInterfaceType|| NwIf.Description.Contains("Hyper-V Virtual")) //跳过环回适配器
                     continue;
 
                 if (NwIf.OperationalStatus == OperationalStatus.Up) //判断是否处于启动状态，如果不判定，将循环打印所有适配器
@@ -66,10 +66,19 @@ namespace Ms_Hosts
                     //获取配适器DNS地址
                     if (Propers.DnsAddresses.Count > 0)
                     {
-                        if (Propers.DnsAddresses[0].ToString()!= Propers.GatewayAddresses[0].Address.ToString())
+                        //获取配适器网关地址
+                        if (Propers.GatewayAddresses.Count > 0)
+                        {
+                            //string 网关 = Propers.GatewayAddresses[0].Address.ToString();
+                            if (Propers.DnsAddresses[0].ToString() != Propers.GatewayAddresses[0].Address.ToString())
+                            {
+                                dnsaddr = Propers.DnsAddresses;
+                            }
+                        }
+                        else
                         {
                             dnsaddr = Propers.DnsAddresses;
-                        }  
+                        }
                     }
                 }
             }
