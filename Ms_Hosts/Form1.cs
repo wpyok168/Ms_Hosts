@@ -40,7 +40,7 @@ namespace Ms_Hosts
             string hostspath = System.Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts";
             attr= File.GetAttributes(hostspath);
             File.SetAttributes(hostspath, FileAttributes.Normal);
-            string[] mshosts = new string[] { $"{iPs[0]} licensing.mp.microsoft.com", "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
+            string[] mshosts = new string[] { "92.38.149.175 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", $"{iPs[0]} licensing.mp.microsoft.com", "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
             SetHosts(mshosts);
         }
         /// <summary>
