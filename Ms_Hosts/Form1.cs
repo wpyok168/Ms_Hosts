@@ -39,7 +39,7 @@ namespace Ms_Hosts
             var result = dnsClient.RetDNS("licensing.mp.microsoft.com");
             System.Net.IPAddress[] iPs = result.AddressList;
 
-            List<string> list = new List<string>() { iPs[0].ToString(), "92.38.149.175", "124.108.22.138", "183.91.56.170", "104.44.230.64", "52.148.82.138" };
+            List<string> list = new List<string>() { iPs[0].ToString(), "92.38.149.175", "141.147.180.87", "103.151.179.4", "124.108.22.138", "183.91.56.170", "104.44.230.64", "52.148.82.138" };
             string ip = string.Empty;
             foreach (string s in list) {
                 if (PingHelp.PingAverage(s,3))
