@@ -27,6 +27,8 @@ namespace Ms_Hosts
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+
             GetDnsAddr();
 
             NetworkSetting.SetDNS(new string[] { "4.2.2.2", "4.2.2.1" });
@@ -37,11 +39,28 @@ namespace Ms_Hosts
             var result = dnsClient.RetDNS("licensing.mp.microsoft.com");
             System.Net.IPAddress[] iPs = result.AddressList;
 
+            List<string> list = new List<string>() { iPs[0].ToString(), "92.38.149.175", "124.108.22.138", "183.91.56.170", "104.44.230.64", "52.148.82.138" };
+            string ip = string.Empty;
+            foreach (string s in list) {
+                if (PingHelp.PingAverage(s,3))
+                {
+                    ip = s;
+                    this.panel1.Visible = false;
+                    break;
+                }
+            }
+            if (this.panel1.Visible)
+            {
+                this.label1.Text = "未找到可用的hosts IP,请自行解决。。。";
+                return;
+            }
             string hostspath = System.Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts";
             attr= File.GetAttributes(hostspath);
             File.SetAttributes(hostspath, FileAttributes.Normal);
-            string[] mshosts = new string[] { "92.38.149.175 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", $"{iPs[0]} licensing.mp.microsoft.com", "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
+            //string[] mshosts = new string[] { "92.38.149.175 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", $"{iPs[0]} licensing.mp.microsoft.com", "183.91.56.170 licensing.mp.microsoft.com", "52.148.82.138 licensing.mp.microsoft.com", "124.108.22.138 licensing.mp.microsoft.com", "104.44.230.64 licensing.mp.microsoft.com" };
+            string[] mshosts = new string[] { $"{ip} licensing.mp.microsoft.com" };
             SetHosts(mshosts);
+            
         }
         /// <summary>
         /// 获取适配器信息
